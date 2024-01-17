@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+
+<body>
+    <h1>Login Page</h1>
+
+    <form id="loginForm">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" required>
+
+        <label for="pw">Password:</label>
+        <input type="password" id="pw" name="pw" required>
+
+        <button type="button" onclick="login()">Login</button>
+    </form>
+
+    <script>
+        async function login() {
+            const id = document.getElementById('id').value;
+            const pw = document.getElementById('pw').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, pw })
+                });
+
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                console.error('Error during login:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

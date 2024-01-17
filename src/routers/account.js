@@ -12,7 +12,6 @@ const namePattern = selectPattern.namePattern
 const emailPattern = selectPattern.emailPattern
 const birthPattern = selectPattern.birthPattern
 const phonePattern = selectPattern.phonePattern
-
 // isLogout -> 로그아웃된 상태면 통과
 // isLogin -> 로그인된 상태면 통과
 //로그인
@@ -32,13 +31,27 @@ router.post("/login", isLogin, checkCondition("id", idPattern, true), checkCondi
             throw error
         }
 
+        // 기존 로그인이 되어 있다면 그건 로그아웃 처리
+        if (req.session.userId === trimId) {
+            console.log("뇽뇽")
+            req.session.destroy(() => {
+                req.session = {} // 세션을 새로 생성하고 초기화
+                req.session.userId = trimId // userId 설정
+                console.log('세션이 파괴되었습니다.')
+            })
+        }
+
+        req.session.userId = trimId
+
+        console.log(req.session.userId)
         req.session.isLogin = true
-        req.session.userId = trimId // 세션에 정보 저장
         req.session.userKey = queryData[0].account_key
         req.session.phone = queryData[0].phone
         req.session.email = queryData[0].email
         req.session.name = queryData[0].name
         req.session.isAdmin = queryData[0].is_admin
+
+        console.log(req.session.userId)
         req.session.save()
         logger(req, res, result) // 요청과 응답에 대한 로그를 기록
         res.status(200).send(result) // 클라이언트에게 결과 데이터 전송
