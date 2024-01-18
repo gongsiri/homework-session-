@@ -17,7 +17,7 @@ const logger = async (req, res, result) => { // 로그 기록
         await logCollection.insertOne(logData) // 로그 데이터를 컬렉션에 삽입
     }
     catch (error) {
-        next(error)
+        console.log(error)
     }
 }
 

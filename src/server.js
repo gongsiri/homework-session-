@@ -11,6 +11,9 @@ const logger = require("./config/loggerConfig")
 const app = express()
 const port = 8001
 
+const loginState = {
+
+}
 require("dotenv").config()
 app.use(session(sessionConfig))
 app.use(express.json())
@@ -21,6 +24,7 @@ app.use("/posting", postingApi)
 app.use("/comment", commentApi)
 app.use("/log", logApi)
 
+// app.use(()) // api가 없을 떄
 app.use((err, req, res, next) => { // 에러 처리
     logger(req, res, { stack: err.stack })
     res.status(err.status || 500).send({ message: err.message || "오류 발생" })
